@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Nadia Benayad · Ateliers créatifs pour seniors · Avignon</title>
 <meta name="description" content="Ateliers créatifs « fait main » clés en main pour résidences seniors et EHPAD, à Avignon et 30 km alentour. Matériel inclus, installation et rangement compris.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Nadia Benayad · Ateliers créatifs pour seniors">
+<meta property="og:description" content="Ateliers « fait main » clés en main pour résidences seniors et EHPAD, à Avignon et 30 km alentour.">
+<meta property="og:image" content="https://azizbena-stack.github.io/md-s85mye/couverture.jpg">
+<meta name="theme-color" content="#F6EFE6">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23B4623F'/><text x='50' y='68' font-size='54' text-anchor='middle' fill='white'>✿</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -50,7 +56,8 @@ section{padding:clamp(72px,11vw,140px) var(--pad);position:relative}
 .brand i{color:var(--terra)}
 .brand small{display:block;font:500 10px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
 .nav{display:flex;gap:26px}
-.nav a{text-decoration:none;font-size:15px;font-weight:500;position:relative}
+.nav a{text-decoration:none;font-size:15px;font-weight:500;position:relative;white-space:nowrap;transition:color .25s}
+@media (max-width:1180px){.nav{gap:16px}.top{gap:20px}.nav a{font-size:14px}}
 .nav a::after{content:"";position:absolute;left:0;right:100%;bottom:-4px;height:1px;background:var(--terra);transition:.3s}
 .nav a:hover::after{right:0}
 .top .cta{padding:11px 20px;font-size:14px}
@@ -217,9 +224,94 @@ footer a{text-decoration:none}
 /* mobile bar */
 .mbar{display:none}
 
-/* reveal */
-.rv{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s ease}
+/* reveal (le délai en cascade est posé en JS) */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+.rv.l{transform:translateX(-40px)}
+.rv.r{transform:translateX(40px)}
+.rv.z{transform:scale(.92)}
 .rv.in{opacity:1;transform:none}
+
+/* barre de progression + retour en haut */
+.progress{position:fixed;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--sage),var(--terra));transform:scaleX(0);transform-origin:0 50%;z-index:40}
+.totop{position:fixed;right:22px;bottom:22px;z-index:30;width:48px;height:48px;border-radius:50%;background:var(--ink);color:var(--cream);display:grid;place-items:center;text-decoration:none;font-size:20px;opacity:0;transform:translateY(16px);pointer-events:none;transition:.35s;box-shadow:0 12px 30px -12px rgba(0,0,0,.5)}
+.totop.show{opacity:1;transform:none;pointer-events:auto}
+.totop:hover{background:var(--terra)}
+
+/* menu actif */
+.nav a.on{color:var(--terra)}
+.nav a.on::after{right:0}
+
+/* boutons : flèche + reflet */
+.cta{position:relative;overflow:hidden}
+.cta::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);transform:translateX(-120%);transition:transform .7s}
+.cta:hover::after{transform:translateX(120%)}
+.ar{display:inline-block;transition:transform .3s}
+a:hover>.ar,button:hover>.ar{transform:translateX(5px)}
+.ar.dn{transform:none}
+a:hover>.ar.dn{transform:translateY(3px)}
+
+/* lien texte souligné animé */
+.lk{color:var(--terra);font-weight:600;text-decoration:none;font-size:15px;display:inline-flex;align-items:center;gap:8px;background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;padding-bottom:2px;transition:background-size .35s}
+.lk:hover{background-size:100% 1px}
+.dark .lk{color:var(--peach)}
+
+/* héro */
+.hero h1 em{background:linear-gradient(rgba(233,183,155,.55),rgba(233,183,155,.55)) 0 90%/0 .22em no-repeat;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background-size 1.2s cubic-bezier(.2,.7,.2,1) 1s}
+.hero h1.in em{background-size:100% .22em}
+.hero .pdf{margin-top:22px}
+.hero-photo::before{content:"";position:absolute;inset:8% -6% -8% 10%;background:var(--peach);opacity:.35;border-radius:42% 58% 63% 37%/45% 41% 59% 55%;z-index:-1;animation:blob 14s ease-in-out infinite}
+@keyframes blob{50%{border-radius:58% 42% 38% 62%/58% 55% 45% 42%;transform:rotate(8deg) scale(1.04)}}
+.hero-photo .pic img{animation:kb 22s ease-in-out infinite alternate}
+@keyframes kb{to{transform:scale(1.08) translate(-1.5%,-1%)}}
+.stamp{transition:transform .6s cubic-bezier(.3,1.6,.5,1)}
+.stamp:hover{transform:rotate(8deg) scale(1.08)}
+.marquee:hover div{animation-play-state:paused}
+
+/* cartes cliquables */
+.card,.season{position:relative}
+.card.rv .pic img{transform:scale(1.18)}
+.card.in .pic img{transform:none;transition:transform 1.4s cubic-bezier(.2,.7,.2,1)}
+.card.in:hover .pic img{transform:scale(1.06);transition-duration:.6s}
+.more{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-size:14px;font-weight:600;color:var(--terra);text-decoration:none}
+.more::before{content:"";position:absolute;inset:0;border-radius:inherit}
+.more:focus-visible{outline:none}
+.card:has(.more:focus-visible),.season:has(.more:focus-visible){outline:2px solid var(--terra);outline-offset:3px}
+.card:hover .more .ar,.season:hover .more .ar{transform:translateX(5px)}
+.season .more{color:var(--ink)}
+.ben .ico,.prom .ck{transition:transform .5s cubic-bezier(.3,1.6,.5,1)}
+.ben:hover .ico{transform:rotate(-10deg) scale(1.12)}
+.prom:hover .ck{transform:scale(1.15)}
+
+/* frise qui se dessine */
+.timeline{border-left:0;position:relative}
+.timeline::before{content:"";position:absolute;left:-1px;top:0;bottom:0;width:1px;background:var(--terra);opacity:.4;transform:scaleY(0);transform-origin:top;transition:transform 1.6s ease .3s}
+.timeline.in::before{transform:none}
+.tl::before{transform:scale(0);transition:transform .5s cubic-bezier(.3,1.6,.5,1)}
+.timeline.in .tl::before{transform:none}
+.timeline.in .tl:nth-child(2)::before{transition-delay:.6s}
+.timeline.in .tl:nth-child(3)::before{transition-delay:1.1s}
+.timeline.in .tl:first-child::before{transition-delay:.2s}
+
+/* carte du secteur */
+.radar .ring.r30{transform:scale(.4);opacity:0;transition:transform 1.2s cubic-bezier(.3,1.4,.5,1) .3s,opacity .8s .3s}
+.radar.in .ring.r30{transform:none;opacity:1}
+
+/* FAQ */
+details[open] p{animation:open .45s ease}
+@keyframes open{from{opacity:0;transform:translateY(-8px)}}
+summary:hover{color:var(--terra)}
+
+/* bandeau présentation */
+.deck{display:grid;grid-template-columns:auto 1fr auto;gap:clamp(20px,4vw,48px);align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:clamp(24px,4vw,44px)}
+.deck-cover{width:170px;aspect-ratio:1.414;border-radius:10px;overflow:hidden;box-shadow:0 22px 40px -22px rgba(43,33,28,.55);transform:rotate(-4deg);transition:transform .5s cubic-bezier(.3,1.4,.5,1)}
+.deck:hover .deck-cover{transform:rotate(0) scale(1.05)}
+.deck-cover img{width:100%;height:100%;object-fit:cover}
+.deck h3{font-size:clamp(24px,2.6vw,32px);font-weight:300}
+.deck p{color:var(--muted);margin-top:6px}
+.deck .row{display:flex;gap:10px;flex-wrap:wrap}
+
+footer nav{display:flex;gap:18px;flex-wrap:wrap}
+footer a:hover{color:var(--cream)}
 
 @media (max-width:980px){
   .nav,.top>.cta{display:none}
@@ -240,21 +332,29 @@ footer a{text-decoration:none}
   .mbar{display:flex;position:fixed;left:12px;right:12px;bottom:12px;z-index:30;gap:8px;background:rgba(43,33,28,.92);padding:8px;border-radius:999px;backdrop-filter:blur(10px)}
   .mbar a{flex:1;justify-content:center;padding:12px 10px;font-size:14px}
   footer{padding-bottom:90px}
+  .totop{display:none}
+  .deck{grid-template-columns:auto 1fr}
+  .deck .row{grid-column:1/-1}
 }
 @media (max-width:600px){
   .grid,.seasons,.prices,.fg,.cols2{grid-template-columns:1fr}
   .price.hi{margin-top:10px}
   .stat b{font-size:48px}
+  .deck{grid-template-columns:1fr}
+  .deck-cover{width:150px}
 }
 @media (prefers-reduced-motion:reduce){
   .rv{opacity:1;transform:none;transition:none}
   html{scroll-behavior:auto}
-  .marquee div,.float,.ring.r30::after{animation:none}
+  .marquee div,.float,.ring.r30::after,.hero-photo::before,.hero-photo .pic img{animation:none}
+  .rv.l,.rv.r,.rv.z,.card.rv .pic img,.radar .ring.r30,.tl::before,.timeline::before{transform:none;opacity:1}
+  .hero h1 em{background-size:100% .22em}
 }
 </style>
 </head>
 <body>
 
+<div class="progress" aria-hidden="true"></div>
 <header class="top" id="top">
   <a class="brand" href="#accueil">Nadia <i>Benayad</i><small>Ateliers créatifs · Avignon</small></a>
   <nav class="nav" aria-label="Menu">
@@ -263,6 +363,7 @@ footer a{text-decoration:none}
     <a href="#nadia">Qui suis-je</a>
     <a href="#tarifs">Tarifs</a>
     <a href="#faq">Questions</a>
+    <a href="#presentation">Présentation</a>
   </nav>
   <a class="cta" href="#contact">Séance découverte</a>
   <button class="burger" aria-label="Ouvrir le menu" aria-expanded="false"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
@@ -277,14 +378,15 @@ footer a{text-decoration:none}
       <h1 class="rv">Des mains qui créent,<br>des visages <em>qui s'illuminent.</em></h1>
       <p class="lead sub rv">Des ateliers « fait main » clés en main, pensés pour le rythme de vos résidents : chacun repart avec un objet dont il est fier.</p>
       <div class="row rv">
-        <a class="cta" href="#contact">Réserver une séance découverte →</a>
+        <a class="cta" href="#contact">Réserver une séance découverte <span class="ar">→</span></a>
         <a class="cta ghost" href="#ateliers">Voir les ateliers</a>
       </div>
+      <div class="pdf rv"><a class="lk" href="Presentation-Ateliers-Creatifs-Nadia.pdf" target="_blank" rel="noopener">Voir ma présentation (PDF) <span class="ar dn">↓</span></a></div>
       <div class="reassure rv">
         <span>Matériel inclus</span><span>Installation & rangement</span><span>Avignon et 30 km</span>
       </div>
     </div>
-    <div class="hero-photo rv">
+    <div class="hero-photo rv r">
       <div class="pic"><img src="couverture.jpg" alt="Atelier créatif en petit groupe animé par Nadia"></div>
       <div class="stamp"><div><b>8 ans</b>d'animation<br>d'ateliers</div></div>
       <div class="float"><div class="dot">✿</div><div><b>Séance découverte</b><span>1 h pour vos résidents</span></div></div>
@@ -335,7 +437,7 @@ footer a{text-decoration:none}
     <h2 class="rv">Une expérience <em>de terrain,</em><br>auprès de tous les publics.</h2>
     <div class="stats">
       <div class="stat rv"><b data-count="8">8</b><span>années d'animation d'ateliers chez Cultura Avignon</span></div>
-      <div class="stat rv"><b>2019</b><span>création de mon activité indépendante</span></div>
+      <div class="stat rv"><b data-count="2019" data-from="2000">2019</b><span>création de mon activité indépendante</span></div>
       <div class="stat rv"><b data-count="6">6</b><span>ateliers thématiques adaptés aux seniors</span></div>
       <div class="stat rv"><b data-count="100" data-suffix="%">100%</b><span>du matériel fourni, préparé à l'avance</span></div>
     </div>
@@ -368,27 +470,27 @@ footer a{text-decoration:none}
     <div class="grid">
       <article class="card rv" data-b="motricite memoire">
         <div class="pic"><img src="macrame.jpg" alt="Porte-clés en macramé" loading="lazy"></div>
-        <div class="body"><span class="tag">Coordination & décoration</span><h3>Macramé</h3><p>Suspensions de plantes, porte-clés bohèmes, décorations murales. Une technique ancestrale de nœuds qui stimule concentration et coordination.</p></div>
+        <div class="body"><span class="tag">Coordination & décoration</span><h3>Macramé</h3><p>Suspensions de plantes, porte-clés bohèmes, décorations murales. Une technique ancestrale de nœuds qui stimule concentration et coordination.</p><a class="more" href="#contact" data-atelier="Macramé">Demander cet atelier <span class="ar">→</span></a></div>
       </article>
       <article class="card rv" data-b="calme memoire">
         <div class="pic"><img src="dessin.jpg" alt="Lettres illustrées et feutres" loading="lazy"></div>
-        <div class="body"><span class="tag">Détente & observation</span><h3>Dessin créatif</h3><p>Dessin végétal, motifs botaniques, initiation à l'illustration accessible à tous. Calme, observation et expression libre.</p></div>
+        <div class="body"><span class="tag">Détente & observation</span><h3>Dessin créatif</h3><p>Dessin végétal, motifs botaniques, initiation à l'illustration accessible à tous. Calme, observation et expression libre.</p><a class="more" href="#contact" data-atelier="Dessin créatif">Demander cet atelier <span class="ar">→</span></a></div>
       </article>
       <article class="card rv" data-b="motricite">
         <div class="pic"><img src="bijoux.jpg" alt="Bijoux de téléphone en perles" loading="lazy"></div>
-        <div class="body"><span class="tag">Motricité fine & esthétique</span><h3>Bijoux</h3><p>Bracelets, boucles d'oreilles, colliers, bijoux de téléphone… On développe la motricité fine et on repart avec un bijou à porter.</p></div>
+        <div class="body"><span class="tag">Motricité fine & esthétique</span><h3>Bijoux</h3><p>Bracelets, boucles d'oreilles, colliers, bijoux de téléphone… On développe la motricité fine et on repart avec un bijou à porter.</p><a class="more" href="#contact" data-atelier="Bijoux">Demander cet atelier <span class="ar">→</span></a></div>
       </article>
       <article class="card rv" data-b="memoire calme">
         <div class="pic"><img src="floral.jpg" alt="Fleurs en papier et cadre botanique" loading="lazy" style="object-position:50% 75%"></div>
-        <div class="body"><span class="tag">Sensoriel & poésie</span><h3>Art floral</h3><p>Fleurs en papier, cadres botaniques, compositions végétales. Une immersion sensorielle douce, très valorisante pour la mémoire visuelle.</p></div>
+        <div class="body"><span class="tag">Sensoriel & poésie</span><h3>Art floral</h3><p>Fleurs en papier, cadres botaniques, compositions végétales. Une immersion sensorielle douce, très valorisante pour la mémoire visuelle.</p><a class="more" href="#contact" data-atelier="Art floral">Demander cet atelier <span class="ar">→</span></a></div>
       </article>
       <article class="card rv" data-b="motricite calme">
         <div class="pic"><img src="couture.jpg" alt="Atelier couture en groupe" loading="lazy"></div>
-        <div class="body"><span class="tag">Gestes simples & textile</span><h3>Couture simple</h3><p>Petits accessoires, customisation textile, points de broderie. Des méthodes douces et des étapes simplifiées.</p></div>
+        <div class="body"><span class="tag">Gestes simples & textile</span><h3>Couture simple</h3><p>Petits accessoires, customisation textile, points de broderie. Des méthodes douces et des étapes simplifiées.</p><a class="more" href="#contact" data-atelier="Couture simple">Demander cet atelier <span class="ar">→</span></a></div>
       </article>
       <article class="card rv" data-b="lien memoire">
         <div class="pic"><img src="theme.jpg" alt="Décorations de Noël faites main" loading="lazy"></div>
-        <div class="body"><span class="tag">Festivités & convivialité</span><h3>Atelier à thème</h3><p>Calqué sur le calendrier : Pâques, fête des mères, automne, Noël. Idéal pour dynamiser la vie sociale de la résidence.</p></div>
+        <div class="body"><span class="tag">Festivités & convivialité</span><h3>Atelier à thème</h3><p>Calqué sur le calendrier : Pâques, fête des mères, automne, Noël. Idéal pour dynamiser la vie sociale de la résidence.</p><a class="more" href="#contact" data-atelier="Atelier à thème">Demander cet atelier <span class="ar">→</span></a></div>
       </article>
     </div>
   </div>
@@ -427,10 +529,10 @@ footer a{text-decoration:none}
       </div>
     </div>
     <div class="seasons">
-      <div class="season s1 rv"><span class="m">Printemps</span><div><h3>Pâques</h3><p>Décorations printanières, fleurs en papier, couleurs douces.</p></div></div>
-      <div class="season s2 rv"><span class="m">Mai</span><div><h3>Fête des mères</h3><p>Un bijou ou un cadre fleuri à offrir à ses proches.</p></div></div>
-      <div class="season s3 rv"><span class="m">Automne</span><div><h3>Couleurs d'automne</h3><p>Compositions végétales et cadres botaniques.</p></div></div>
-      <div class="season s4 rv"><span class="m">Décembre</span><div><h3>Noël</h3><p>Ornements et décorations pour embellir la résidence.</p></div></div>
+      <div class="season s1 rv"><span class="m">Printemps</span><div><h3>Pâques</h3><p>Décorations printanières, fleurs en papier, couleurs douces.</p><a class="more" href="#contact" data-atelier="Atelier Pâques">Réserver <span class="ar">→</span></a></div></div>
+      <div class="season s2 rv"><span class="m">Mai</span><div><h3>Fête des mères</h3><p>Un bijou ou un cadre fleuri à offrir à ses proches.</p><a class="more" href="#contact" data-atelier="Atelier Fête des mères">Réserver <span class="ar">→</span></a></div></div>
+      <div class="season s3 rv"><span class="m">Automne</span><div><h3>Couleurs d'automne</h3><p>Compositions végétales et cadres botaniques.</p><a class="more" href="#contact" data-atelier="Atelier Couleurs d'automne">Réserver <span class="ar">→</span></a></div></div>
+      <div class="season s4 rv"><span class="m">Décembre</span><div><h3>Noël</h3><p>Ornements et décorations pour embellir la résidence.</p><a class="more" href="#contact" data-atelier="Atelier Noël">Réserver <span class="ar">→</span></a></div></div>
     </div>
   </div>
 </section>
@@ -439,7 +541,7 @@ footer a{text-decoration:none}
 <section class="alt" id="nadia">
   <div class="wrap about">
     <div>
-      <div class="about-photo rv">
+      <div class="about-photo rv l">
         <div class="pic"><img src="atelier.jpg" alt="Atelier dessin en cours" loading="lazy"></div>
         <img class="avatar" src="portrait.jpg" alt="Nadia Benayad">
       </div>
@@ -456,7 +558,7 @@ footer a{text-decoration:none}
         <div class="tl"><small>Joya Vaucluse</small><h3>Aide à domicile auprès de personnes âgées</h3><p>Écoute active, rythme et adaptations motrices des seniors au quotidien.</p></div>
         <div class="tl"><small>Depuis 2019 · Indépendante</small><h3>Ateliers à domicile & publics spécifiques</h3><p>Foyer 84 (handicap), Hortus Botanicus, Maison du Monde, campings, boutiques.</p></div>
       </div>
-      <a class="cta ghost rv" href="#contact">Faire connaissance →</a>
+      <a class="cta ghost rv" href="#contact">Faire connaissance <span class="ar">→</span></a>
     </div>
   </div>
 </section>
@@ -491,8 +593,9 @@ footer a{text-decoration:none}
         <li class="rv"><span class="ck">✓</span><div><b>Avignon et 30 km alentour</b><br>Déplacement inclus, je suis véhiculée.</div></li>
         <li class="rv"><span class="ck">✓</span><div><b>Au‑delà de 30 km</b><br>Sur devis : Vaucluse, Gard, Bouches-du-Rhône.</div></li>
       </ul>
+      <p class="rv" style="margin-top:30px"><a class="lk" href="#contact" data-format="Interventions régulières">Demander un devis <span class="ar">→</span></a> &nbsp; <a class="lk" href="https://www.google.com/maps/place/Avignon" target="_blank" rel="noopener">Voir Avignon sur la carte <span class="ar">↗</span></a></p>
     </div>
-    <div class="radar rv" aria-hidden="true">
+    <div class="radar rv z" aria-hidden="true">
       <div class="ring"></div>
       <div class="ring r30"></div>
       <span class="lbl out">Au‑delà · sur devis</span>
@@ -518,6 +621,25 @@ footer a{text-decoration:none}
       <details class="rv"><summary>Mon établissement est à plus de 30 km d'Avignon.</summary><p>Pas de souci : au-delà de 30 km, j'interviens sur devis dans le Vaucluse, le Gard et les Bouches-du-Rhône.</p></details>
       <details class="rv"><summary>Que doit faire l'équipe d'animation ?</summary><p>Simplement nous accueillir. J'installe l'espace, j'anime, puis je range et remets les lieux en état. Aucune contrainte logistique pour vos équipes.</p></details>
     </div>
+    <p class="rv" style="text-align:center;margin-top:36px;color:var(--muted)">Une autre question ? <a class="lk" href="mailto:nadiabena@icloud.com?subject=Question%20sur%20vos%20ateliers">Écrivez-moi <span class="ar">→</span></a> ou <a class="lk" href="tel:+33605200403">appelez-moi</a></p>
+  </div>
+</section>
+
+<!-- PRESENTATION -->
+<section id="presentation" style="padding-top:clamp(56px,7vw,90px);padding-bottom:clamp(56px,7vw,90px)">
+  <div class="wrap">
+    <div class="deck rv z">
+      <a class="deck-cover" href="Presentation-Ateliers-Creatifs-Nadia.pdf" target="_blank" rel="noopener" aria-label="Ouvrir la présentation"><img src="presentation-apercu.jpg" alt="" loading="lazy"></a>
+      <div>
+        <div class="kicker" style="margin-bottom:10px">Pour votre équipe</div>
+        <h3>Ma présentation <em>à partager</em></h3>
+        <p>Les ateliers, le déroulé, les tarifs et le secteur, en 10 pages : à transmettre à votre direction ou à imprimer.</p>
+      </div>
+      <div class="row">
+        <a class="cta" href="Presentation-Ateliers-Creatifs-Nadia.pdf" target="_blank" rel="noopener">Ouvrir le PDF <span class="ar">↗</span></a>
+        <a class="cta ghost" href="Presentation-Ateliers-Creatifs-Nadia.pdf" download>Télécharger <span class="ar dn">↓</span></a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -532,13 +654,14 @@ footer a{text-decoration:none}
         <a class="cta" href="tel:+33605200403">Appeler · 06 05 20 04 03</a>
         <a class="cta ghost" href="mailto:nadiabena@icloud.com">nadiabena@icloud.com</a>
       </div>
+      <p class="rv" style="margin-top:22px"><a class="lk" href="Presentation-Ateliers-Creatifs-Nadia.pdf" target="_blank" rel="noopener">Ma présentation en PDF (10 pages) <span class="ar">↗</span></a></p>
       <div class="idcard rv">
         <span><b>Nadia Benayad</b> · Animatrice d'ateliers créatifs</span>
         <span>Avignon et 30 km alentour · au‑delà sur devis</span>
         <span>Micro-entreprise depuis 2019 · véhiculée (permis B)</span>
       </div>
     </div>
-    <form class="rv" id="form">
+    <form class="rv r" id="form">
       <h3>Demander une séance découverte</h3>
       <div class="fg">
         <label>Établissement<input name="etab" required placeholder="Résidence, EHPAD…"></label>
@@ -557,7 +680,7 @@ footer a{text-decoration:none}
         <label>Nombre de résidents<input name="nb" type="number" min="1" inputmode="numeric"></label>
       </div>
       <label>Votre message<textarea name="msg" placeholder="Ateliers qui vous intéressent, dates possibles…"></textarea></label>
-      <button class="cta" type="submit">Préparer mon e-mail →</button>
+      <button class="cta" type="submit">Préparer mon e-mail <span class="ar">→</span></button>
       <p class="hint">Votre messagerie s'ouvre avec la demande pré-remplie, il ne reste qu'à l'envoyer.</p>
     </form>
   </div>
@@ -566,8 +689,10 @@ footer a{text-decoration:none}
 
 <footer>
   <span>© Nadia Benayad · Ateliers créatifs pour seniors · Avignon</span>
+  <nav aria-label="Pied de page"><a href="#ateliers">Ateliers</a><a href="#tarifs">Tarifs</a><a href="#faq">Questions</a><a href="Presentation-Ateliers-Creatifs-Nadia.pdf" target="_blank" rel="noopener">Présentation PDF</a></nav>
   <span><a href="tel:+33605200403">06 05 20 04 03</a> · <a href="mailto:nadiabena@icloud.com">nadiabena@icloud.com</a></span>
 </footer>
+<a class="totop" href="#accueil" aria-label="Revenir en haut">↑</a>
 
 <div class="mbar">
   <a class="cta ghost" style="color:var(--cream)" href="tel:+33605200403">Appeler</a>
@@ -577,16 +702,32 @@ footer a{text-decoration:none}
 <script>
 // header state + mobile menu
 const top_=document.getElementById('top'), burger=document.querySelector('.burger');
-const onScroll=()=>top_.classList.toggle('scrolled',scrollY>30); onScroll(); addEventListener('scroll',onScroll,{passive:true});
+const bar=document.querySelector('.progress'), totop=document.querySelector('.totop');
+const onScroll=()=>{
+  top_.classList.toggle('scrolled',scrollY>30);
+  totop.classList.toggle('show',scrollY>innerHeight);
+  bar.style.transform=`scaleX(${scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight)})`;
+}; onScroll(); addEventListener('scroll',onScroll,{passive:true});
+
+// menu actif selon la section visible
+const links=[...document.querySelectorAll('.nav a')];
+const spy=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting)links.forEach(a=>a.classList.toggle('on',a.hash==='#'+e.target.id));
+}),{rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('main section[id]').forEach(s=>spy.observe(s));
 burger.onclick=()=>{const o=top_.classList.toggle('open');burger.setAttribute('aria-expanded',o)};
 document.querySelectorAll('.nav a').forEach(a=>a.onclick=()=>{top_.classList.remove('open');burger.setAttribute('aria-expanded',false)});
 
 // reveal + count-up
 const io=new IntersectionObserver(es=>es.forEach(e=>{
-  if(!e.isIntersecting)return; const el=e.target; el.classList.add('in'); io.unobserve(el);
+  if(!e.isIntersecting)return; const el=e.target; io.unobserve(el);
+  // cascade : chaque élément frère apparaît un peu après le précédent
+  const i=[...el.parentElement.children].filter(c=>c.classList.contains('rv')).indexOf(el);
+  el.style.transitionDelay=Math.min(i,6)*.09+'s'; el.classList.add('in');
+  setTimeout(()=>el.style.transitionDelay='',1200+i*90);
   const b=el.querySelector('[data-count]'); if(!b||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-  const n=+b.dataset.count, suf=b.dataset.suffix||'', t0=performance.now();
-  const tick=t=>{const p=Math.min((t-t0)/1200,1);b.textContent=Math.round(n*(1-Math.pow(1-p,3)))+suf;if(p<1)requestAnimationFrame(tick)};
+  const n=+b.dataset.count, n0=+(b.dataset.from||0), suf=b.dataset.suffix||'', t0=performance.now();
+  const tick=t=>{const p=Math.min((t-t0)/1400,1);b.textContent=Math.round(n0+(n-n0)*(1-Math.pow(1-p,3)))+suf;if(p<1)requestAnimationFrame(tick)};
   requestAnimationFrame(tick);
 }),{threshold:.15});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
@@ -601,6 +742,12 @@ document.querySelectorAll('.filters button').forEach(btn=>btn.onclick=()=>{
 // price buttons preselect the format
 const form=document.getElementById('form');
 document.querySelectorAll('[data-format]').forEach(a=>a.addEventListener('click',()=>{form.format.value=a.dataset.format}));
+// « Demander cet atelier » : pré-remplit le message
+document.querySelectorAll('[data-atelier]').forEach(a=>a.addEventListener('click',()=>{
+  const line='Atelier qui nous intéresse : '+a.dataset.atelier;
+  if(!form.msg.value.includes(line))form.msg.value=(form.msg.value?form.msg.value+'\n':'')+line;
+  setTimeout(()=>form.etab.focus({preventScroll:true}),700);
+}));
 
 // contact form -> pre-filled e-mail (no server)
 form.onsubmit=e=>{
